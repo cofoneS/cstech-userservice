@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  cstech_userservice_db:
+    image: postgres:15.2
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_SCHEMA}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PWD}   
+    networks:
+     - cstech_userservice_net
+    ports:
+     - "${DB_EXTERNAL_PORT}:${DB_INTERNAL_PORT}"
+    container_name: ${DOCKER_CONTAINER_NAME}_db
+  cstech_userservice_app:
+    build:
+      context: .
+      dockerfile: ./spring/Dockerfile
+      args:
+        - XXX=XXX
+    environment:
+      LOGGING_LEVEL_CSTECH: ${APP_LOGGING_LEVEL_CSTECH} 
+      POSTGRES_HOST: cstech_userservice_db
+      POSTGRES_PORT: ${DB_INTERNAL_PORT} 
+      POSTGRES_DB: ${DB_SCHEMA}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PWD}
+      POSTGRES_SHOW_SQL: ${APP_POSTGRES_SHOW_SQL}      
+      JAVA_OPTS: >
+        -DXXX=TEST         
+    depends_on:
+      - cstech_userservice_db
+    ports:
+      - "${APP_EXTERNAL_PORT}:${APP_INTERNAL_PORT}"
+    networks:
+     - cstech_userservice_net
+    container_name: ${DOCKER_CONTAINER_NAME}_app
+networks:
+  cstech_userservice_net:
+      name: ${DOCKER_CONTAINER_NAME}_network_fe
+      driver: bridge
