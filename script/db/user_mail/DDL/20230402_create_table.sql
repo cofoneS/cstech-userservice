@@ -2,7 +2,7 @@
 drop table IF EXISTS cs_user_mail;
 
 CREATE TABLE cs_user_mail (
-  cs_user_mail_id serial4       not null,
+  user_mail_id    serial4       not null,
   mail 		      varchar(1023) not null,
   note        	  text          null,
   started_at      timestamptz   not null,
@@ -13,10 +13,10 @@ CREATE TABLE cs_user_mail (
   updated_at	  timestamptz   not null,
   updated_by  	  varchar(15)   not null,
   deleted_at	  timestamptz   null,
-  CONSTRAINT cs_user_mail_pk PRIMARY KEY (cs_user_mail_id)
+  CONSTRAINT cs_user_mail_pk PRIMARY KEY (user_mail_id)
 );
 
-COMMENT ON COLUMN cs_user_mail.cs_user_mail_id   IS 'Primary key of the table';
+COMMENT ON COLUMN cs_user_mail.user_mail_id      IS 'Primary key of the table';
 COMMENT ON COLUMN cs_user_mail.mail 			 IS 'Street name value';
 COMMENT ON COLUMN cs_user_mail.started_at        IS 'Start datatime where live in this address';
 COMMENT ON COLUMN cs_user_mail.ended_at          IS 'End datatime where live in this address';
@@ -27,3 +27,4 @@ COMMENT ON COLUMN cs_user_mail.updated_at 		 IS 'Log time when updated record on
 COMMENT ON COLUMN cs_user_mail.updated_by 		 IS 'User that performed the operation';
 COMMENT ON COLUMN cs_user_mail.deleted_at 		 IS 'Log time when logical deleted record on the table';
 
+alter table cs_user_mail add CONSTRAINT cs_user_mail_user_id_FK FOREIGN KEY (user_id) REFERENCES cs_user(user_id);
