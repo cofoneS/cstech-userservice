@@ -4,7 +4,7 @@ services:
     image: postgres:15.2
     restart: always
     environment:
-      POSTGRES_DB: ${DB_SCHEMA}
+      POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PWD}   
     networks:
@@ -22,7 +22,7 @@ services:
       LOGGING_LEVEL_CSTECH: ${APP_LOGGING_LEVEL_CSTECH} 
       POSTGRES_HOST: cstech_userservice_db
       POSTGRES_PORT: ${DB_INTERNAL_PORT} 
-      POSTGRES_DB: ${DB_SCHEMA}
+      POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PWD}
       POSTGRES_SHOW_SQL: ${APP_POSTGRES_SHOW_SQL}      
