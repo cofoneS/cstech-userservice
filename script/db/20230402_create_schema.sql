@@ -1,2 +1,4 @@
 
-CREATE SCHEMA IF NOT EXISTS userservice;
+DROP SCHEMA IF EXISTS csuserapp;
+
+CREATE SCHEMA IF NOT EXISTS csuserapp;
