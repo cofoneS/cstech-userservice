@@ -59,4 +59,76 @@ public class UserAddressEntity extends BaseEntity{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id", nullable=false, insertable = true, updatable = false)
 	private UserEntity user;
+
+	public Long getUserAddressId() {
+		return userAddressId;
+	}
+
+	public void setUserAddressId(Long userAddressId) {
+		this.userAddressId = userAddressId;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public String getPostalCode() {
+		return postalCode;
+	}
+
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+
+	public String getStreetNumber() {
+		return streetNumber;
+	}
+
+	public void setStreetNumber(String streetNumber) {
+		this.streetNumber = streetNumber;
+	}
+
+	public String getCityKey() {
+		return cityKey;
+	}
+
+	public void setCityKey(String cityKey) {
+		this.cityKey = cityKey;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public String getStartedAt() {
+		return startedAt;
+	}
+
+	public void setStartedAt(String startedAt) {
+		this.startedAt = startedAt;
+	}
+
+	public Timestamp getEndedAt() {
+		return endedAt;
+	}
+
+	public void setEndedAt(Timestamp endedAt) {
+		this.endedAt = endedAt;
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}
 }
