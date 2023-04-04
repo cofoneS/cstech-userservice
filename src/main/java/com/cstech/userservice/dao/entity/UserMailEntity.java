@@ -30,7 +30,15 @@ public class UserMailEntity extends BaseEntity{
 
 	@Basic
 	@Column(name = "note")
-	private String note;	
+	private String note;
+	
+	@Basic
+	@Column(name = "checked")
+	private Boolean checked;
+	
+	@Basic
+	@Column(name = "checked_at")
+	private String checkedAt;
 	
 	@Basic
 	@NotNull
@@ -43,6 +51,69 @@ public class UserMailEntity extends BaseEntity{
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id", nullable=false, insertable = true, updatable = false)
-	private UserEntity user;	
-	
+	private UserEntity user;
+
+	public Long getUserMailId() {
+		return userMailId;
+	}
+
+	public void setUserMailId(Long userMailId) {
+		this.userMailId = userMailId;
+	}
+
+	public String getMail() {
+		return mail;
+	}
+
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public Boolean getChecked() {
+		return checked;
+	}
+
+	public void setChecked(Boolean checked) {
+		this.checked = checked;
+	}
+
+	public String getCheckedAt() {
+		return checkedAt;
+	}
+
+	public void setCheckedAt(String checkedAt) {
+		this.checkedAt = checkedAt;
+	}
+
+	public String getStartedAt() {
+		return startedAt;
+	}
+
+	public void setStartedAt(String startedAt) {
+		this.startedAt = startedAt;
+	}
+
+	public Timestamp getEndedAt() {
+		return endedAt;
+	}
+
+	public void setEndedAt(Timestamp endedAt) {
+		this.endedAt = endedAt;
+	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}	
 }
