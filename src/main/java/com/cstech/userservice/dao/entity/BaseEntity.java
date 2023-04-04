@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 
 @MappedSuperclass
 public abstract class BaseEntity {
+	
+	public static final String SCHEMA_DB_APP = "csuserapp";
   
     @NotNull
 	@Column(name = "enabled", nullable=false)

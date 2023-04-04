@@ -14,7 +14,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "cs_user", schema = "userservice")
+@Table(name = "cs_user", schema = BaseEntity.SCHEMA_DB_APP)
 public class UserEntity extends BaseEntity{
 
 	@Id
