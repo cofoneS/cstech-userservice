@@ -38,6 +38,16 @@ public class UserEntity extends BaseEntity{
 	private String userKey;
 	
 	@Basic
+	@NotNull
+	@Column(name = "tin", length = 255)
+	private String tin;
+	
+	@Basic
+	@NotNull
+	@Column(name = "tin_country_key", length = 31)
+	private String tinCountryKey;	
+	
+	@Basic
 	@Column(name = "nickname", length = 255)
 	private String nickname;
 	
@@ -50,5 +60,85 @@ public class UserEntity extends BaseEntity{
 	
 	@OneToMany(mappedBy="user", fetch = FetchType.LAZY)
 	private List<UserAddressEntity> userAddress;
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getSurname() {
+		return surname;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public String getUserKey() {
+		return userKey;
+	}
+
+	public void setUserKey(String userKey) {
+		this.userKey = userKey;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public List<UserMailEntity> getUserMail() {
+		return userMail;
+	}
+
+	public void setUserMail(List<UserMailEntity> userMail) {
+		this.userMail = userMail;
+	}
+
+	public List<UserAddressEntity> getUserAddress() {
+		return userAddress;
+	}
+
+	public void setUserAddress(List<UserAddressEntity> userAddress) {
+		this.userAddress = userAddress;
+	}
+
+	public String getTin() {
+		return tin;
+	}
+
+	public void setTin(String tin) {
+		this.tin = tin;
+	}
+
+	public String getTinCountryKey() {
+		return tinCountryKey;
+	}
+
+	public void setTinCountryKey(String tinCountryKey) {
+		this.tinCountryKey = tinCountryKey;
+	}
 	
 }
