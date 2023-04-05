@@ -32,7 +32,10 @@ COMMENT ON COLUMN csuserapp.cs_user.updated_at 		IS 'Log time when updated recor
 COMMENT ON COLUMN csuserapp.cs_user.updated_by 		IS 'User that performed the operation';
 COMMENT ON COLUMN csuserapp.cs_user.deleted_at 		IS 'Log time when logical deleted record on the table';
 
-CREATE UNIQUE INDEX cs_user_user_key_UK1 ON csuserapp.cs_user (user_key);
-CREATE UNIQUE INDEX cs_user_tin_UK2      ON csuserapp.cs_user (tin, tin_country_key);
+ALTER TABLE csuserapp.cs_user ADD CONSTRAINT cs_user_user_key_UK1 UNIQUE (user_key);
+ALTER TABLE csuserapp.cs_user ADD CONSTRAINT cs_user_tin_UK2 UNIQUE (tin, tin_country_key);
+
+CREATE UNIQUE INDEX cs_user_user_key_IDX1 ON csuserapp.cs_user (user_key);
+CREATE UNIQUE INDEX cs_user_tin_IDX2 ON csuserapp.cs_user (tin, tin_country_key);
 
 

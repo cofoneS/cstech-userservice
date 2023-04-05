@@ -34,3 +34,7 @@ COMMENT ON COLUMN csuserapp.cs_user_address.updated_by         IS 'User that per
 COMMENT ON COLUMN csuserapp.cs_user_address.deleted_at         IS 'Log time when logical deleted record on the table';
 
 alter table csuserapp.cs_user_address add CONSTRAINT cs_user_address_user_id_FK FOREIGN KEY (user_id) REFERENCES csuserapp.cs_user (user_id);
+
+ALTER TABLE csuserapp.cs_user_address ADD CONSTRAINT cs_user_address_user_enabled_UK1 UNIQUE (user_id, enabled);
+
+CREATE UNIQUE INDEX cs_user_address_user_enabled_IDX1 ON csuserapp.cs_user_address (user_id, enabled);
