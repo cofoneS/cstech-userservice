@@ -7,5 +7,5 @@ import com.cstech.userservice.dao.entity.UserEntity;
 
 @Repository
 public interface UserPersistence extends JpaRepository<UserEntity, Long> {
-	
+	 
 }
