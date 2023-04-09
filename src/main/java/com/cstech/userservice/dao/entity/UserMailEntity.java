@@ -38,12 +38,12 @@ public class UserMailEntity extends BaseEntity{
 	
 	@Basic
 	@Column(name = "checked_at")
-	private String checkedAt;
+	private Timestamp checkedAt;
 	
 	@Basic
 	@NotNull
 	@Column(name = "started_at")
-	private String startedAt;
+	private Timestamp startedAt;
 	
 	@Basic
 	@Column(name = "ended_at")
@@ -85,19 +85,19 @@ public class UserMailEntity extends BaseEntity{
 		this.checked = checked;
 	}
 
-	public String getCheckedAt() {
+	public Timestamp getCheckedAt() {
 		return checkedAt;
 	}
 
-	public void setCheckedAt(String checkedAt) {
+	public void setCheckedAt(Timestamp checkedAt) {
 		this.checkedAt = checkedAt;
 	}
 
-	public String getStartedAt() {
+	public Timestamp getStartedAt() {
 		return startedAt;
 	}
 
-	public void setStartedAt(String startedAt) {
+	public void setStartedAt(Timestamp startedAt) {
 		this.startedAt = startedAt;
 	}
 
@@ -115,5 +115,5 @@ public class UserMailEntity extends BaseEntity{
 
 	public void setUser(UserEntity user) {
 		this.user = user;
-	}	
+	}
 }

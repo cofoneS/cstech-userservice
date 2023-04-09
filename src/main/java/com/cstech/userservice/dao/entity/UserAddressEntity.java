@@ -50,7 +50,7 @@ public class UserAddressEntity extends BaseEntity{
 	@Basic
 	@NotNull
 	@Column(name = "started_at")
-	private String startedAt;
+	private Timestamp startedAt;
 	
 	@Basic
 	@Column(name = "ended_at")
@@ -108,11 +108,11 @@ public class UserAddressEntity extends BaseEntity{
 		this.note = note;
 	}
 
-	public String getStartedAt() {
+	public Timestamp getStartedAt() {
 		return startedAt;
 	}
 
-	public void setStartedAt(String startedAt) {
+	public void setStartedAt(Timestamp startedAt) {
 		this.startedAt = startedAt;
 	}
 
