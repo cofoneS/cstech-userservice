@@ -1,11 +1,16 @@
 package com.cstech.userservice.app.model;
 
+import java.io.Serializable;
+
+import com.cstech.userservice.dao.entity.UserAddressEntity;
+import com.cstech.userservice.utility.Utility;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public class AddressModel {
+public class AddressModel implements Serializable {
 
 	private Long id;
 	
@@ -32,6 +37,41 @@ public class AddressModel {
 	
 	private Long endedAt;
 	
+	public AddressModel() {}
+	
+	public AddressModel(
+			Long id,
+			String street,
+			String postalCode,
+			String streetNumber,
+			String cityKey,
+			String note,
+			Long startedAt,
+			Long endedAt
+			) {
+		this.id = id;
+		this.street = street;
+		this.postalCode = postalCode;
+		this.streetNumber = streetNumber;
+		this.cityKey = cityKey;
+		this.note = note;
+		this.startedAt = startedAt;
+		this.endedAt = endedAt;
+	}
+	
+	public AddressModel(final UserAddressEntity entity) {
+		if(entity != null) {
+			this.id = entity.getUserAddressId();
+			this.cityKey = Utility.upperCase(entity.getCityKey());
+			this.endedAt = Utility.doEpocTime(entity.getEndedAt());
+			this.note = entity.getNote();
+			this.postalCode = Utility.upperCase(entity.getPostalCode());
+			this.startedAt = Utility.doEpocTime(entity.getStartedAt());
+			this.street = entity.getStreet();
+			this.streetNumber = entity.getStreetNumber();
+		}
+	}
+		
 	public Long getId() {
 		return id;
 	}

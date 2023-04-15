@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cstech.userservice.app.model.MailModel;
 import com.cstech.userservice.dao.entity.UserEntity;
 import com.cstech.userservice.dao.entity.UserMailEntity;
-import com.cstech.userservice.dao.persistence.UserMailPersistence;
-import com.cstech.userservice.dao.persistence.UserPersistence;
+import com.cstech.userservice.dao.repository.UserMailRepository;
+import com.cstech.userservice.dao.repository.UserRepository;
 import com.cstech.userservice.exception.AddressNotFoundException;
 import com.cstech.userservice.exception.MailNotFoundException;
 import com.cstech.userservice.exception.ResourceNotFoundException;
@@ -25,16 +25,16 @@ public class MailService {
 	private static final Logger log = Logger.getLogger(MailService.class.getName());
 		
 	@Autowired
-	UserMailPersistence userMailPersistence;
+	UserMailRepository userMailPersistence;
 	
 	@Autowired
-	UserPersistence userPersistence;
+	UserRepository userPersistence;
 
 	public MailModel findMailById(final String userKey, final Long id) {
 		
 		UserMailEntity entity = userMailPersistence.findById(id)
 				.orElseThrow(() -> new MailNotFoundException(id));
-		return doMailModel(entity);
+		return new MailModel(entity);
 	}	
 	
 	public MailModel saveMail(final String userKey, MailModel model, final Long userId) {
@@ -64,14 +64,14 @@ public class MailService {
 			userMailPersistence.findById(model.getId()).map( item -> {	
 				deleteMail(userKey, model.getId());
 				model.setId(null);
-				item = doMailEntity(userKey, model, entity);
+				item = new UserMailEntity(userKey, model, entity, Boolean.TRUE);
 			    item = userMailPersistence.save(item);
-			    return doMailModel(item); 
+			    return new MailModel(item); 
 			}).orElseThrow(() -> new AddressNotFoundException(model.getId()));			
 		}else {
-			UserMailEntity mailEntity = doMailEntity(userKey, model, entity);
+			UserMailEntity mailEntity = new UserMailEntity(userKey, model, entity, Boolean.FALSE);
 			mailEntity = userMailPersistence.save(mailEntity);
-			return doMailModel(mailEntity);
+			return new MailModel(mailEntity);
 		}
 		throw new ResourceNotFoundException(model.getId());
 	}	
@@ -88,40 +88,4 @@ public class MailService {
 		return id;
 	}	
 
-	public UserMailEntity doMailEntity(final String userKey, final MailModel model, final UserEntity userEntity) {
-		if(model != null) {
-			final Timestamp now = Utility.doTimestamp();
-			final UserMailEntity entity = new UserMailEntity();
-			entity.setChecked(model.getChecked());
-			entity.setCheckedAt( Utility.epochToTimestamp(model.getCheckedAt()) );
-			entity.setEndedAt( Utility.epochToTimestamp(model.getEndedAt()) );
-			entity.setUserMailId(model.getId());
-			entity.setMail(model.getMail());
-			entity.setNote(model.getNote());
-			entity.setStartedAt( Utility.epochToTimestamp(model.getStartedAt()) );
-			entity.setEnabled(Boolean.TRUE);
-			entity.setCreatedAt(now);
-			entity.setUpdatedBy(userKey);
-			entity.setUpdatedAt(now);
-			entity.setDeletedAt(null);
-			entity.setUser(userEntity);
-			return entity;
-		}		
-		return null;
-	}
-	
-	public MailModel doMailModel(final UserMailEntity entity) {
-		if(entity != null ) {
-			final MailModel model = new MailModel();
-			model.setChecked(entity.getChecked());
-			model.setId(entity.getUserMailId());
-			model.setNote(entity.getNote());
-			model.setCheckedAt( Utility.doEpocTime(entity.getCheckedAt()) );
-			model.setEndedAt( Utility.doEpocTime(entity.getEndedAt()) );
-			model.setMail( Utility.upperCase(entity.getMail()) );
-			model.setStartedAt(entity.getStartedAt().getTime());
-			return model;			
-		}
-		return null;
-	}	
 }

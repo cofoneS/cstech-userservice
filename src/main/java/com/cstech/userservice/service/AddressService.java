@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cstech.userservice.app.model.AddressModel;
 import com.cstech.userservice.dao.entity.UserAddressEntity;
 import com.cstech.userservice.dao.entity.UserEntity;
-import com.cstech.userservice.dao.persistence.UserAddressPersistence;
-import com.cstech.userservice.dao.persistence.UserPersistence;
+import com.cstech.userservice.dao.repository.UserAddressRepository;
+import com.cstech.userservice.dao.repository.UserRepository;
 import com.cstech.userservice.exception.AddressNotFoundException;
 import com.cstech.userservice.exception.ResourceNotFoundException;
 import com.cstech.userservice.exception.UserNotFoundException;
@@ -24,15 +24,15 @@ public class AddressService {
 	private static final Logger log = Logger.getLogger(AddressService.class.getName());
 		
 	@Autowired
-	UserAddressPersistence userAddressPersistence;	
+	UserAddressRepository userAddressPersistence;	
 	
 	@Autowired
-	UserPersistence userPersistence;	
+	UserRepository userPersistence;	
 
 	public AddressModel findAddressById(final String userKey, final Long id) {		
 		UserAddressEntity entity = userAddressPersistence.findById(id)
 				.orElseThrow(() -> new AddressNotFoundException(id));
-		return doAddressModel(entity);
+		return new AddressModel(entity);
 	}
 	
 	public AddressModel saveAddress(final String userKey, AddressModel model, final Long userId) {
@@ -63,14 +63,14 @@ public class AddressService {
 			userAddressPersistence.findById(model.getId()).map( item -> {	
 				deleteAddress(userKey, model.getId());
 				item.setUserAddressId(null);
-				item = doUserAddressEntity(userKey, model, entity);
+				item = new UserAddressEntity(userKey, model, entity, Boolean.TRUE);
 			    item = userAddressPersistence.save(item);
-			    return doAddressModel(item); 
+			    return new AddressModel(item); 
 			}).orElseThrow(() -> new AddressNotFoundException(model.getId()));			
 		}else {
-			UserAddressEntity addressEntity = doUserAddressEntity(userKey, model, entity);
+			UserAddressEntity addressEntity = new UserAddressEntity(userKey, model, entity, Boolean.FALSE);
 			addressEntity = userAddressPersistence.save(addressEntity);
-			return doAddressModel(addressEntity);
+			return new AddressModel(addressEntity);
 		}
 		throw new ResourceNotFoundException(model.getId());
 	}	
@@ -87,43 +87,4 @@ public class AddressService {
 		return id;
 	}	
 	
-	public UserAddressEntity doUserAddressEntity(final String userKey, AddressModel model, final UserEntity userEntity) {
-		if(model != null) {
-			final Timestamp now = Utility.doTimestamp();
-			UserAddressEntity entity = new UserAddressEntity();
-			entity.setCityKey(model.getCityKey());
-			entity.setNote(model.getNote());
-			entity.setCityKey(model.getPostalCode());
-			entity.setStreet(model.getStreet());
-			entity.setPostalCode(model.getPostalCode());
-			entity.setStreetNumber(model.getStreetNumber());
-			entity.setEndedAt( Utility.epochToTimestamp(model.getEndedAt()) );
-			entity.setStartedAt( Utility.epochToTimestamp(model.getStartedAt()) );
-			entity.setUserAddressId(model.getId());
-			entity.setEnabled(true);
-			entity.setCreatedAt(now);
-			entity.setUpdatedBy(userKey);
-			entity.setUpdatedAt(now);
-			entity.setDeletedAt(null);
-			entity.setUser(userEntity);
-			return entity;
-		}		
-		return null;
-	}
-	
-	public AddressModel doAddressModel(final UserAddressEntity entity) {
-		if(entity != null) {
-			final AddressModel model = new AddressModel();
-			model.setCityKey( Utility.upperCase(entity.getCityKey()) );
-			model.setEndedAt( Utility.doEpocTime(entity.getEndedAt()) );
-			model.setId(entity.getUserAddressId());
-			model.setNote(entity.getNote());
-			model.setPostalCode( Utility.upperCase(entity.getPostalCode()) );
-			model.setStartedAt( Utility.doEpocTime(entity.getStartedAt()) );
-			model.setStreet(entity.getStreet());
-			model.setStreetNumber(entity.getStreetNumber());
-			return model;
-		}
-		return null;
-	}	
 }

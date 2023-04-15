@@ -1,8 +1,16 @@
 package com.cstech.userservice.dao.entity;
 
-import java.sql.Date;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.hibernate.annotations.Cascade;
+
+import com.cstech.userservice.app.model.UserModel;
+import com.cstech.userservice.utility.Utility;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
@@ -12,6 +20,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -84,10 +93,45 @@ public class UserEntity extends BaseEntity{
 	private String avatar;
 	
 	@OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-	private List<UserMailEntity> userMail;
+	//@JoinColumn(name = "user_id")
+	private Collection<UserMailEntity> userMails;
 	
 	@OneToMany(mappedBy="user", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-	private List<UserAddressEntity> userAddress;
+	//@JoinColumn(name = "user_id") --> because we are using mappedBy
+	//@Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+	private Collection<UserAddressEntity> userAddresses;
+	
+	public UserEntity() {
+		super();
+	}
+	
+	public UserEntity(final String userKey, UserModel model, final Boolean isDeleted) {
+		super(userKey, isDeleted);
+		if(model != null) {
+			this.userId = model.getId();
+			this.firstName = Utility.upperCase(model.getFirstName());
+			this.surname = Utility.upperCase(model.getSurname());
+			this.userKey = Utility.upperCase(model.getUserKey());
+			this.nickname = Utility.upperCase(model.getNickname());
+			this.birthdate = Utility.doOffsetDateTime(model.getBirthdate());
+			this.cityOfBirth = Utility.upperCase(model.getCityOfBirth());
+			this.countryOfBirth = Utility.upperCase(model.getCountryOfBirth());
+			this.identityDocumentCode = Utility.upperCase(model.getIdentityDocumentCode());
+			this.cieCode = Utility.upperCase(model.getCieCode());
+			this.avatar = model.getAvatar();
+			this.tin = Utility.upperCase(model.getTin());
+			this.tinCountryKey = Utility.upperCase(model.getTinCountry());
+			this.vat = Utility.upperCase(model.getVat());		
+		}			
+		
+		Collection<UserAddressEntity> userAddress = new ArrayList<>();
+		userAddress.add( new UserAddressEntity(userKey, model.getAddress(), this, Boolean.FALSE));
+		this.userAddresses = userAddress;			
+
+		Collection<UserMailEntity> userMails = new ArrayList<>();
+		userMails.add(new UserMailEntity(userKey, model.getMail(), this, Boolean.FALSE));
+		this.userMails = userMails;
+	}
 
 	public Long getUserId() {
 		return userId;
@@ -201,20 +245,21 @@ public class UserEntity extends BaseEntity{
 		this.avatar = avatar;
 	}
 
-	public List<UserMailEntity> getUserMail() {
-		return userMail;
+	public Collection<UserMailEntity> getUserMails() {
+		return userMails;
 	}
 
-	public void setUserMail(List<UserMailEntity> userMail) {
-		this.userMail = userMail;
+	public Collection<UserAddressEntity> getUserAddresses() {
+		return userAddresses;
 	}
 
-	public List<UserAddressEntity> getUserAddress() {
-		return userAddress;
+	public void setUserAddresses(Collection<UserAddressEntity> userAddresses) {
+		this.userAddresses = userAddresses;
 	}
 
-	public void setUserAddress(List<UserAddressEntity> userAddress) {
-		this.userAddress = userAddress;
+	public void setUserMails(Collection<UserMailEntity> userMails) {
+		this.userMails = userMails;
 	}
+
 
 }

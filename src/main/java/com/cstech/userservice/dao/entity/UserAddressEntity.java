@@ -1,6 +1,9 @@
 package com.cstech.userservice.dao.entity;
 
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+
+import com.cstech.userservice.app.model.AddressModel;
+import com.cstech.userservice.utility.Utility;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -50,15 +53,34 @@ public class UserAddressEntity extends BaseEntity{
 	@Basic
 	@NotNull
 	@Column(name = "started_at")
-	private Timestamp startedAt;
+	private OffsetDateTime startedAt;
 	
 	@Basic
 	@Column(name = "ended_at")
-	private Timestamp endedAt;
+	private OffsetDateTime endedAt;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id", nullable=false, insertable = true, updatable = false)
 	private UserEntity user;
+	
+	public UserAddressEntity() {
+		super();
+	}
+	
+	public UserAddressEntity(final String userKey, AddressModel model, final UserEntity userEntity, final Boolean isDeleted) {
+		super(userKey, isDeleted);
+		if(model != null) {
+			this.userAddressId = model.getId();
+			this.street = (model.getStreet());
+			this.postalCode = model.getPostalCode();
+			this.streetNumber = model.getStreetNumber();
+			this.cityKey = model.getCityKey();
+			this.note = model.getNote();
+			this.startedAt = Utility.epochToOffsetDateTime(model.getStartedAt());
+			this.endedAt = Utility.epochToOffsetDateTime(model.getEndedAt());
+			this.user = userEntity;
+		}	
+	}
 
 	public Long getUserAddressId() {
 		return userAddressId;
@@ -108,19 +130,19 @@ public class UserAddressEntity extends BaseEntity{
 		this.note = note;
 	}
 
-	public Timestamp getStartedAt() {
+	public OffsetDateTime getStartedAt() {
 		return startedAt;
 	}
 
-	public void setStartedAt(Timestamp startedAt) {
+	public void setStartedAt(OffsetDateTime startedAt) {
 		this.startedAt = startedAt;
 	}
 
-	public Timestamp getEndedAt() {
+	public OffsetDateTime getEndedAt() {
 		return endedAt;
 	}
 
-	public void setEndedAt(Timestamp endedAt) {
+	public void setEndedAt(OffsetDateTime endedAt) {
 		this.endedAt = endedAt;
 	}
 

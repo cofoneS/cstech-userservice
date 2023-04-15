@@ -1,6 +1,9 @@
 package com.cstech.userservice.dao.entity;
 
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+
+import com.cstech.userservice.app.model.MailModel;
+import com.cstech.userservice.utility.Utility;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -38,20 +41,38 @@ public class UserMailEntity extends BaseEntity{
 	
 	@Basic
 	@Column(name = "checked_at")
-	private Timestamp checkedAt;
+	private OffsetDateTime checkedAt;
 	
 	@Basic
 	@NotNull
 	@Column(name = "started_at")
-	private Timestamp startedAt;
+	private OffsetDateTime startedAt;
 	
 	@Basic
 	@Column(name = "ended_at")
-	private Timestamp endedAt;
+	private OffsetDateTime endedAt;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id", nullable=false, insertable = true, updatable = false)
 	private UserEntity user;
+	
+	public UserMailEntity() {
+		super();
+	}
+	
+	public UserMailEntity(final String userKey, final MailModel model, final UserEntity userEntity, final boolean isDeleted) {
+		super(userKey, isDeleted);
+		if(model != null) {
+			this.userMailId = model.getId();
+			this.mail = model.getMail();
+			this.note = model.getNote();
+			this.checked = model.getChecked();
+			this.checkedAt = Utility.epochToOffsetDateTime(model.getCheckedAt());
+			this.startedAt = Utility.epochToOffsetDateTime(model.getStartedAt());
+			this.endedAt = Utility.epochToOffsetDateTime(model.getEndedAt());
+			this.user = userEntity;
+		}
+	}
 
 	public Long getUserMailId() {
 		return userMailId;
@@ -85,27 +106,27 @@ public class UserMailEntity extends BaseEntity{
 		this.checked = checked;
 	}
 
-	public Timestamp getCheckedAt() {
+	public OffsetDateTime getCheckedAt() {
 		return checkedAt;
 	}
 
-	public void setCheckedAt(Timestamp checkedAt) {
+	public void setCheckedAt(OffsetDateTime checkedAt) {
 		this.checkedAt = checkedAt;
 	}
 
-	public Timestamp getStartedAt() {
+	public OffsetDateTime getStartedAt() {
 		return startedAt;
 	}
 
-	public void setStartedAt(Timestamp startedAt) {
+	public void setStartedAt(OffsetDateTime startedAt) {
 		this.startedAt = startedAt;
 	}
 
-	public Timestamp getEndedAt() {
+	public OffsetDateTime getEndedAt() {
 		return endedAt;
 	}
 
-	public void setEndedAt(Timestamp endedAt) {
+	public void setEndedAt(OffsetDateTime endedAt) {
 		this.endedAt = endedAt;
 	}
 

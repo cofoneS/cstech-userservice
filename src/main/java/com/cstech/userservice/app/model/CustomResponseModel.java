@@ -1,6 +1,8 @@
 package com.cstech.userservice.app.model;
 
-public class CustomResponseModel<T> {
+import java.io.Serializable;
+
+public class CustomResponseModel<T> implements Serializable {
 	
     private Boolean success;
     private String msg;

@@ -2,6 +2,7 @@ package com.cstech.userservice.app.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import com.cstech.userservice.app.model.AddressModel;
 import com.cstech.userservice.app.model.CustomResponseModel;
 import com.cstech.userservice.app.model.MailModel;
 import com.cstech.userservice.app.model.UserModel;
+import com.cstech.userservice.app.controller.BaseControllerTest;
 
 @SpringBootTest
 public class UserControllerTest extends BaseControllerTest{
@@ -78,7 +80,6 @@ public class UserControllerTest extends BaseControllerTest{
 		assertThat(resDelete.getData()).isEqualTo(resUser.getData().getId());
 
 	}	
-	
-	
 
+	
 }

@@ -1,13 +1,34 @@
 package com.cstech.userservice.app.model;
 
-public class UserSearchModel {
+import java.io.Serializable;
+
+import jakarta.validation.constraints.Size;
+
+public class UserSearchModel implements Serializable {
 	
+	@Size(max = 255, message = "firstName must be {max} characters.")
 	private String firstName;
+	
+	@Size(max = 255, message = "surname must be {max} characters.")
 	private String surname;
+	
+	@Size(max = 255, message = "userKey must be {max} characters.")
 	private String userKey;
+	
+	@Size(max = 255, message = "nickname must be {max} characters.")
 	private String nickname;
+	
+	@Size(max = 1023, message = "mail must be {max} characters.")
 	private String mail;
-	private String city;
+	
+	@Size(max = 255, message = "tin must be {max} characters.")
+	private String tin;
+	
+	@Size(max = 31, message = "tinCountry must be {max} characters.")
+	private String tinCountry;
+	
+	@Size(max = 63, message = "postalCode must be {max} characters.")
+	private String postalCode;
 	
 	public String getFirstName() {
 		return firstName;
@@ -39,10 +60,22 @@ public class UserSearchModel {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-	public String getCity() {
-		return city;
+	public String getTin() {
+		return tin;
 	}
-	public void setCity(String city) {
-		this.city = city;
+	public void setTin(String tin) {
+		this.tin = tin;
+	}
+	public String getTinCountry() {
+		return tinCountry;
+	}
+	public void setTinCountry(String tinCountry) {
+		this.tinCountry = tinCountry;
+	}
+	public String getPostalCode() {
+		return postalCode;
+	}
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 }

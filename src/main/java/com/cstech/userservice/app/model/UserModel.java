@@ -1,10 +1,24 @@
 package com.cstech.userservice.app.model;
 
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.util.Collection;
+import java.util.List;
+
+import com.cstech.userservice.dao.entity.UserAddressEntity;
+import com.cstech.userservice.dao.entity.UserAddressEntity_;
+import com.cstech.userservice.dao.entity.UserEntity;
+import com.cstech.userservice.dao.entity.UserEntity_;
+import com.cstech.userservice.dao.entity.UserMailEntity;
+import com.cstech.userservice.dao.entity.UserMailEntity_;
+import com.cstech.userservice.utility.Utility;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class UserModel {
+public class UserModel implements Serializable {
 		
 	private Long id;
 	
@@ -43,6 +57,147 @@ public class UserModel {
 	
 	@NotNull(message = "MAIL is required.")
 	private MailModel mail;
+	
+	public UserModel() {};
+	
+	public UserModel(
+			Long id, 
+			String firstName, 
+			String surname,
+			String userKey, 
+			String nickname, 
+			OffsetDateTime birthdate, 
+			String cityOfBirth, 
+			String countryOfBirth, 
+			String identityDocumentCode,
+			String cieCode,
+			String avatar,
+			String tin,
+			String tinCountry,
+			String vat,
+			Collection<UserAddressEntity> addresses,
+			Collection<UserMailEntity> mails
+			) {
+		this.id = id;
+		this.firstName = firstName;
+		this.surname = surname;
+		this.userKey = userKey;
+		this.nickname = nickname;
+		this.birthdate = Utility.doOffsetDateTime(birthdate);
+		this.cityOfBirth = cityOfBirth;
+		this.countryOfBirth = countryOfBirth;
+		this.identityDocumentCode = identityDocumentCode;
+		this.cieCode = cieCode;
+		this.avatar = avatar;
+		this.tin = tin;
+		this.tinCountry = tinCountry;
+		this.vat = vat;
+
+		if(addresses != null && addresses.size() > 0 && addresses.stream().findFirst().isPresent()) {
+			this.address = new AddressModel(addresses.stream().findFirst().get());
+		}
+		
+		if(mails != null && mails.size() > 0 && mails.stream().findFirst().isPresent()) {
+			this.mail = new MailModel(mails.stream().findFirst().get());
+		}
+	};
+	
+	public UserModel(
+			Long id 
+			,String firstName 
+			,String surname
+			,String userKey 
+			,String nickname
+			,OffsetDateTime birthdate 
+			,String cityOfBirth
+			,String countryOfBirth
+			,String identityDocumentCode
+			,String cieCode
+			,String avatar
+			,String tin
+			,String tinCountry
+			,String vat
+			
+			,String addressCityKey
+			,OffsetDateTime addressEndedAt
+			,String addressNote
+	        ,String addressPostalCode
+	        ,OffsetDateTime addressStartedAt
+	        ,String addressStreet
+	        ,String addressStreetNumber
+            ,Long addressId
+
+            ,Boolean mailChecked
+            ,OffsetDateTime mailCheckedAt
+            ,OffsetDateTime mailEndedAt
+			,String mail
+			,String mailNote
+			,OffsetDateTime mailStartedAt
+			,Long mailId
+			) {
+		this.id = id;
+		this.firstName = firstName;
+		this.surname = surname;
+		this.userKey = userKey;
+		this.nickname = nickname;
+		this.birthdate = Utility.doOffsetDateTime(birthdate);
+		this.cityOfBirth = cityOfBirth;
+		this.countryOfBirth = countryOfBirth;
+		this.identityDocumentCode = identityDocumentCode;
+		this.cieCode = cieCode;
+		this.avatar = avatar;
+		this.tin = tin;
+		this.tinCountry = tinCountry;
+		this.vat = vat;
+
+		this.address = new AddressModel(
+				addressId,
+				addressStreet, 
+				addressPostalCode, 
+				addressStreetNumber, 
+				addressCityKey, 
+				addressNote, 
+				Utility.doEpocTime(addressStartedAt), 
+				Utility.doEpocTime(addressEndedAt)
+				);
+		this.mail = new MailModel(
+				mailId,
+				mail, 
+				mailNote, 
+				mailChecked, 
+				Utility.doEpocTime(mailCheckedAt), 
+				Utility.doEpocTime(mailStartedAt), 
+				Utility.doEpocTime(mailEndedAt)
+			);
+		
+
+	};	
+		
+	public UserModel(final UserEntity entity) {
+		if(entity != null) {
+			this.id = entity.getUserId();
+			this.firstName = entity.getFirstName();
+			this.surname = entity.getSurname();
+			this.userKey = entity.getUserKey();
+			this.nickname = entity.getNickname();
+			this.birthdate = Utility.doOffsetDateTime(entity.getBirthdate());
+			this.cityOfBirth = entity.getCityOfBirth();
+			this.countryOfBirth = entity.getCountryOfBirth();
+			this.identityDocumentCode = entity.getIdentityDocumentCode();
+			this.cieCode = entity.getCieCode();
+			this.avatar = entity.getAvatar();
+			this.tin = entity.getTin();
+			this.tinCountry = entity.getTinCountryKey();
+			this.vat = entity.getVat();
+			if(entity.getUserAddresses() != null && entity.getUserAddresses().size() > 0 && entity.getUserAddresses().stream().findFirst().isPresent()) {
+				this.address = new AddressModel(entity.getUserAddresses().stream().findFirst().get());
+			}
+			
+			if(entity.getUserMails() != null && entity.getUserMails().size() > 0 && entity.getUserMails().stream().findFirst().isPresent()) {
+				this.mail = new MailModel(entity.getUserMails().stream().findFirst().get());
+			}
+		}
+	}
 	
 	public Long getId() {
 		return id;

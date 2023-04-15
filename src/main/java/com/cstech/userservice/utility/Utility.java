@@ -44,10 +44,26 @@ public class Utility {
 		return (time != null ? time.getTime() : null);
 	}	
 	
+	public static Long doEpocTime(OffsetDateTime datetime) {
+		return (datetime != null ? datetime.toEpochSecond() : null);
+	}		
+	
+	/**
+	 * Birthdate have to format  YYYYMMDD
+	 *
+	 * @param dateInStr
+	 * @return
+	 */
 	public static OffsetDateTime doOffsetDateTime(String dateInStr) {
 		return (dateInStr != null && dateInStr.length() == 6 ? OffsetDateTime.parse(dateInStr, DateTimeFormatter.BASIC_ISO_DATE) : null);
 	}
 	
+	/**
+	 * OffsetDateTime have to format  YYYYMMDD
+	 *
+	 * @param dateInStr
+	 * @return
+	 */	
 	public static String doOffsetDateTime(OffsetDateTime date) {
 		return (date != null ? date.format(DateTimeFormatter.BASIC_ISO_DATE) : null);
 	}	
@@ -59,4 +75,16 @@ public class Utility {
 	public final static long epochDateTime() {
 		return OffsetDateTime.now().toEpochSecond();
 	}
+	
+	public static boolean checkCriteriaField(String field) {
+		return ( field != null && field.length() > 0 ? true : false);
+	}	
+	
+	public static String formatField(String field) {
+		return ( field != null ? field.toUpperCase() : field);
+	}	
+	
+	public static String formatLikeField(String field) {
+		return ( field != null ? field.toUpperCase().concat("%") : field);
+	}	
 }

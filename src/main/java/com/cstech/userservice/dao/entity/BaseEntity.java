@@ -1,22 +1,25 @@
 package com.cstech.userservice.dao.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+
+import com.cstech.userservice.utility.Utility;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotNull;
 
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
 	
 	public static final String SCHEMA_DB_APP = "csuserapp";
   
     @NotNull
 	@Column(name = "enabled", nullable=false)
-	private Boolean enabled;		
+    private Boolean enabled;		
 
 	@CreatedDate
 	@NotNull
@@ -34,11 +37,35 @@ public abstract class BaseEntity {
 	
 	@Column(name = "deleted_at")
 	private Timestamp deletedAt;
-
+	
+	public BaseEntity() {
+		super();
+	}
+	
+	public BaseEntity(String userKey) {
+		super();
+		final Timestamp now = Utility.doTimestamp();
+		enabled = true;
+		createdAt = now;
+		updatedBy = userKey;
+		updatedAt = now;
+		deletedAt = null;
+	}
+	
+	public BaseEntity(String userKey, boolean idDeleted) {
+		super();
+		final Timestamp now = Utility.doTimestamp();
+		enabled = ( idDeleted ? Boolean.FALSE : Boolean.TRUE);
+		createdAt = now;
+		updatedBy = userKey;
+		updatedAt = now;
+		deletedAt = ( idDeleted ? now : null);
+	}	
+	
 	public Boolean getEnabled() {
 		return enabled;
 	}
-
+	
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
